@@ -16,8 +16,8 @@
 
 #include <stdio.h>
 #include <string.h>
-#include <SDL.h>
-#include <SDL_gfxPrimitives.h>
+#include "SDL.h"
+#include "SDL_gfxPrimitives.h"
 #include "quirc_internal.h"
 #include "dbgutil.h"
 
