@@ -14,9 +14,18 @@
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 CC ?= gcc
-PREFIX ?= /usr/local
-SDL_CFLAGS ?= pkg-config --cflags sdl 
-SDL_LIBS ?= pkg-config --libs sdl
+PREFIX ?= /usr
+
+ifeq ($(strip $(SDL_CFLAGS)),)
+SDL_CFLAGS != pkg-config --cflags sdl 
+endif
+
+ifeq ($(strip $(SDL_LIBS)),)
+SDL_LIBS != pkg-config --libs sdl
+endif
+
+#SDL_CFLAGS != pkg-config --cflags sdl 
+#SDL_LIBS != pkg-config --libs sdl
 
 LIB_VERSION = 1.0
 
@@ -63,12 +72,12 @@ libquirc.so.$(LIB_VERSION): $(LIB_OBJ)
 	$(CC) $(QUIRC_CFLAGS) -o $@ -c $<
 
 install: libquirc.a libquirc.so.$(LIB_VERSION) quirc-demo quirc-scanner
-	install -o root -g root -m 0644 lib/quirc.h $(DESTDIR)$(PREFIX)/include
-	install -o root -g root -m 0644 libquirc.a $(DESTDIR)$(PREFIX)/lib
-	install -o root -g root -m 0755 libquirc.so.$(LIB_VERSION) \
+	install -m 0644 lib/quirc.h $(DESTDIR)$(PREFIX)/include
+	install -m 0644 libquirc.a $(DESTDIR)$(PREFIX)/lib
+	install -m 0755 libquirc.so.$(LIB_VERSION) \
 		$(DESTDIR)$(PREFIX)/lib
-	install -o root -g root -m 0755 quirc-demo $(DESTDIR)$(PREFIX)/bin
-	install -o root -g root -m 0755 quirc-scanner $(DESTDIR)$(PREFIX)/bin
+	install -m 0755 quirc-demo $(DESTDIR)$(PREFIX)/bin
+	install -m 0755 quirc-scanner $(DESTDIR)$(PREFIX)/bin
 
 uninstall:
 	rm -f $(DESTDIR)$(PREFIX)/include/quirc.h
